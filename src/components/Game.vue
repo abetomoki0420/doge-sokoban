@@ -13,6 +13,7 @@
     class="game_board_wrapper"
   >
     <h1>Doge sokoban</h1>
+    <h3>use WASD or Arrow Key</h3>
     <div class="game_board">
       <div
         v-for="row in gameSize"
@@ -62,16 +63,27 @@ export default Vue.extend({
     Cell
   },
   mounted() {
-    this.game = new Game(this.size, [
+    const presetObjects = [
       ...this.createWall(),
       new GameObject(2, 2, "user"),
-      new GameObject(5, 3, "box"),
       new GameObject(3, 3, "box"),
+      new GameObject(6, 5, "box"),
+      new GameObject(2, 4, "wall"),
       new GameObject(3, 4, "wall"),
-      new GameObject(5, 4, "wall"),
-      new GameObject(5, 5, "star"),
-      new GameObject(3, 5, "star")
-    ]);
+      new GameObject(4, 4, "wall"),
+      new GameObject(6, 4, "wall"),
+      new GameObject(7, 4, "wall"),
+      new GameObject(2, 7, "wall"),
+      new GameObject(3, 7, "wall"),
+      new GameObject(4, 7, "wall"),
+      new GameObject(5, 7, "wall"),
+      new GameObject(6, 7, "wall"),
+      new GameObject(7, 7, "wall"),
+      new GameObject(6, 2, "star"),
+      new GameObject(4, 6, "star")
+    ];
+
+    this.game = new Game(this.size, presetObjects);
 
     this.$nextTick(() => {
       (this.$refs.wrapper as any).focus();
