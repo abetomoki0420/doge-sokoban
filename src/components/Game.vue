@@ -12,6 +12,7 @@
     tabindex="0"
     class="game_board_wrapper"
   >
+    <h1>Doge sokoban</h1>
     <div class="game_board">
       <div
         v-for="row in gameSize"
@@ -31,9 +32,9 @@
       <button @click="move('up')">Up</button>
       <button @click="move('right')">Right</button>
     </div>
-    <div v-if="checkClear">
-      clear!
-    </div>
+    <h1 v-if="checkClear">
+      wow such very clear wow
+    </h1>
   </div>
 </template>
 
@@ -129,11 +130,11 @@ export default Vue.extend({
 .game_board {
   &_cellrow {
     display: flex;
+    justify-content: center;
   }
 
   &_wrapper {
-    height: 90vh;
-    width: 90vw;
+    text-align: center;
     &:focus {
       outline: 0 black solid;
     }

@@ -30,7 +30,7 @@ export default Vue.extend({
 $container_size: 30px;
 $magnification: 1;
 $container_body_size: $container_size * $magnification;
-$theme_color: darken(tomato, 50%);
+$theme_color: rgba(0, 0, 0, 0.1);
 $user_color: $theme_color;
 $box_color: tomato;
 $wall_color: green;
@@ -51,17 +51,23 @@ $star_color: yellow;
       @include box($container_body_size);
       border: 1px solid $theme_color;
       box-sizing: border-box;
+      background-image: url("~@/assets/jpg/floor.jpg");
+      background-size: contain;
       &.user {
-        background: $user_color;
+        background-image: url("~@/assets/jpg/doge.jpg");
+        background-size: contain;
       }
       &.box {
-        background: $box_color;
+        background-image: url("~@/assets/jpg/box.jpg");
+        background-size: cover;
       }
       &.wall {
-        background: $wall_color;
+        background-image: url("~@/assets/jpg/wall.jpg");
+        background-size: cover;
       }
       &.star {
-        background: $star_color;
+        background-image: url("~@/assets/jpg/wow.jpg");
+        background-size: cover;
       }
     }
   }

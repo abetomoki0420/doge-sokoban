@@ -1,18 +1,17 @@
 <template>
   <div id="app">
-    <game/>
+    <game />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 import Game from "@/components/Game.vue";
 
 export default Vue.extend({
-  name: 'App',
-  data(){
-    return{
-    }
+  name: "App",
+  data() {
+    return {};
   },
   components: {
     Game
@@ -21,8 +20,9 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-  .app{
-    display: flex;
-    justify-content: center;
-  }
+.app {
+  display: flex;
+  width: 100vw;
+  justify-content: center;
+}
 </style>
