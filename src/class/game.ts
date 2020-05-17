@@ -1,6 +1,8 @@
 export type Key = "left" | "up" | "right" | "down";
 export type GameObjectType = "user" | "box" | "wall" | "star";
 
+import _ from "lodash";
+
 interface Point {
   X: number;
   Y: number;
@@ -51,6 +53,13 @@ export class Game {
     this.count++;
   }
 
+  public back() {
+    if (this.records.length > 0) {
+      this.gameObjects = this.records[this.records.length - 1];
+      this.records.pop();
+    }
+  }
+
   public isClear(): boolean {
     // 全ての star の上に box が存在していたら game clear
     const stars = this.gameObjects.filter(gameObject => {
@@ -90,6 +99,16 @@ export class Game {
       gameObject => gameObject.type === "user"
     );
     if (!user) return;
+
+    this.records.push(_.cloneDeep(this.gameObjects));
+    // console.log(this.records);
+    const objs = this.records[this.records.length - 1];
+    // console.log(objs);
+
+    const u = objs.find(obj => {
+      return obj.type === "user";
+    });
+    console.log(this.records.length - 1, u);
 
     const { X, Y } = user.getPoint();
     // 進行方向が入力されると

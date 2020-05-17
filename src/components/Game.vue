@@ -32,6 +32,7 @@
       <button @click="move('down')">Down</button>
       <button @click="move('up')">Up</button>
       <button @click="move('right')">Right</button>
+      <button @click="back">back</button>
     </div>
     <h1 v-if="checkClear">
       wow such very clear wow
@@ -62,25 +63,37 @@ export default Vue.extend({
   components: {
     Cell
   },
-  mounted() {
+  async mounted() {
+    const { data } = await this.axios.get(
+      "https://us-central1-doge-sokoban.cloudfunctions.net/getMap?id=1"
+    );
+
+    const responsedGameObjects = [];
+    this.size = data.size;
+    for (const i in data.objects) {
+      const { X, Y, type } = data.objects[i];
+      responsedGameObjects.push(new GameObject(X, Y, type));
+    }
+
     const presetObjects = [
       ...this.createWall(),
-      new GameObject(2, 2, "user"),
-      new GameObject(3, 3, "box"),
-      new GameObject(6, 5, "box"),
-      new GameObject(2, 4, "wall"),
-      new GameObject(3, 4, "wall"),
-      new GameObject(4, 4, "wall"),
-      new GameObject(6, 4, "wall"),
-      new GameObject(7, 4, "wall"),
-      new GameObject(2, 7, "wall"),
-      new GameObject(3, 7, "wall"),
-      new GameObject(4, 7, "wall"),
-      new GameObject(5, 7, "wall"),
-      new GameObject(6, 7, "wall"),
-      new GameObject(7, 7, "wall"),
-      new GameObject(6, 2, "star"),
-      new GameObject(4, 6, "star")
+      ...responsedGameObjects
+      // new GameObject(2, 2, "user"),
+      // new GameObject(3, 3, "box"),
+      // new GameObject(6, 5, "box"),
+      // new GameObject(2, 4, "wall"),
+      // new GameObject(3, 4, "wall"),
+      // new GameObject(4, 4, "wall"),
+      // new GameObject(6, 4, "wall"),
+      // new GameObject(7, 4, "wall"),
+      // new GameObject(2, 7, "wall"),
+      // new GameObject(3, 7, "wall"),
+      // new GameObject(4, 7, "wall"),
+      // new GameObject(5, 7, "wall"),
+      // new GameObject(6, 7, "wall"),
+      // new GameObject(7, 7, "wall"),
+      // new GameObject(6, 2, "star"),
+      // new GameObject(4, 6, "star")
     ];
 
     this.game = new Game(this.size, presetObjects);
@@ -121,6 +134,11 @@ export default Vue.extend({
       if (!this.game) return 0;
 
       this.game.move(key);
+    },
+    back() {
+      if (!this.game) return;
+
+      this.game.back();
     },
     createWall() {
       const walls = [];
