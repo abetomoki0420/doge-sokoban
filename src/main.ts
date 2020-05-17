@@ -11,6 +11,7 @@ Vue.use(VueAxios, axios);
 
 import Game from "@/components/Game.vue";
 import Editor from "@/components/Editor.vue";
+import List from "@/components/List.vue";
 
 const router = new VueRouter({
   routes: [
@@ -21,6 +22,10 @@ const router = new VueRouter({
     {
       path: "/editor",
       component: Editor
+    },
+    {
+      path: "/list",
+      component: List
     }
   ]
 });

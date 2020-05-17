@@ -1,5 +1,14 @@
 <template>
   <div id="app">
+    <div>
+      <router-link to="/?id=1">Top</router-link>
+    </div>
+    <div>
+      <router-link to="/list">List</router-link>
+    </div>
+    <div>
+      <router-link to="/editor">Editor</router-link>
+    </div>
     <router-view />
   </div>
 </template>
