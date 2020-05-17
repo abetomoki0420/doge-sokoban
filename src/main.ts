@@ -9,7 +9,21 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 
-const router = new VueRouter();
+import Game from "@/components/Game.vue";
+import Editor from "@/components/Editor.vue";
+
+const router = new VueRouter({
+  routes: [
+    {
+      path: "/",
+      component: Game
+    },
+    {
+      path: "/editor",
+      component: Editor
+    }
+  ]
+});
 
 new Vue({
   router,

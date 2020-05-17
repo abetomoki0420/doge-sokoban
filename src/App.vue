@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <game />
+    <router-view />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import Game from "@/components/Game.vue";
+// import Game from "@/components/Game.vue";
 
 export default Vue.extend({
   name: "App",
@@ -14,7 +14,7 @@ export default Vue.extend({
     return {};
   },
   components: {
-    Game
+    // Game
   }
 });
 </script>

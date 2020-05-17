@@ -132,7 +132,7 @@ export default Vue.extend({
     reset() {
       if (!this.game) return;
 
-      this.game.reset();
+      this.game.back();
     },
     createWall() {
       const walls = [];

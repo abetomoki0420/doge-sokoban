@@ -15,7 +15,7 @@ export default Vue.extend({
     Y: Number,
     selected: {
       type: String as PropType<GameObjectType>,
-      required: true
+      required: false
     }
   },
   computed: {
