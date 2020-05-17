@@ -34,6 +34,7 @@
         <button @click="move('up')">Up</button>
         <button @click="move('right')">Right</button>
         <button @click="back">Back</button>
+        <button @click="reset">Reset</button>
       </div>
     </div>
     <h1 v-if="checkClear">
@@ -127,6 +128,11 @@ export default Vue.extend({
       if (!this.game) return;
 
       this.game.back();
+    },
+    reset() {
+      if (!this.game) return;
+
+      this.game.reset();
     },
     createWall() {
       const walls = [];

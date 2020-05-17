@@ -60,6 +60,13 @@ export class Game {
     }
   }
 
+  public reset() {
+    if (this.records.length > 0) {
+      this.gameObjects = this.records[0];
+      this.records = [];
+    }
+  }
+
   public isClear(): boolean {
     // 全ての star の上に box が存在していたら game clear
     const stars = this.gameObjects.filter(gameObject => {
