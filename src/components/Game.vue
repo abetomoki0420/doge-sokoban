@@ -28,11 +28,13 @@
           :selected="selectLocation(cell, row)"
         />
       </div>
-      <button @click="move('left')">Left</button>
-      <button @click="move('down')">Down</button>
-      <button @click="move('up')">Up</button>
-      <button @click="move('right')">Right</button>
-      <button @click="back">back</button>
+      <div class="buttons">
+        <button @click="move('left')">Left</button>
+        <button @click="move('down')">Down</button>
+        <button @click="move('up')">Up</button>
+        <button @click="move('right')">Right</button>
+        <button @click="back">Back</button>
+      </div>
     </div>
     <h1 v-if="checkClear">
       wow such very clear wow
@@ -64,8 +66,13 @@ export default Vue.extend({
     Cell
   },
   async mounted() {
+    let query = "";
+    if (this.$route.query.id) {
+      query = `?id=${this.$route.query.id}`;
+    }
+
     const { data } = await this.axios.get(
-      "https://us-central1-doge-sokoban.cloudfunctions.net/getMap?id=1"
+      `https://us-central1-doge-sokoban.cloudfunctions.net/getMap${query}`
     );
 
     const responsedGameObjects = [];
@@ -75,26 +82,7 @@ export default Vue.extend({
       responsedGameObjects.push(new GameObject(X, Y, type));
     }
 
-    const presetObjects = [
-      ...this.createWall(),
-      ...responsedGameObjects
-      // new GameObject(2, 2, "user"),
-      // new GameObject(3, 3, "box"),
-      // new GameObject(6, 5, "box"),
-      // new GameObject(2, 4, "wall"),
-      // new GameObject(3, 4, "wall"),
-      // new GameObject(4, 4, "wall"),
-      // new GameObject(6, 4, "wall"),
-      // new GameObject(7, 4, "wall"),
-      // new GameObject(2, 7, "wall"),
-      // new GameObject(3, 7, "wall"),
-      // new GameObject(4, 7, "wall"),
-      // new GameObject(5, 7, "wall"),
-      // new GameObject(6, 7, "wall"),
-      // new GameObject(7, 7, "wall"),
-      // new GameObject(6, 2, "star"),
-      // new GameObject(4, 6, "star")
-    ];
+    const presetObjects = [...this.createWall(), ...responsedGameObjects];
 
     this.game = new Game(this.size, presetObjects);
 
@@ -167,6 +155,11 @@ export default Vue.extend({
     text-align: center;
     &:focus {
       outline: 0 black solid;
+    }
+  }
+  .buttons {
+    button {
+      font-size: 20px;
     }
   }
 }

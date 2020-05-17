@@ -10,10 +10,16 @@ export const getMap = functions.https.onRequest(async (request, response) => {
   response.set("Access-Control-Allow-Origin", "*");
   const id = request.query.id;
 
-  await admin
-    .database()
-    .ref(`/maps/${id}`)
-    .once("value", snapshot => {
-      response.send(snapshot);
+  let res: any;
+  const ref = admin
+    .firestore()
+    .collection("maps")
+    .where("id", "==", id);
+
+  ref.get().then(snapshot => {
+    snapshot.forEach(doc => {
+      res = doc.data();
     });
+    response.send(res);
+  });
 });

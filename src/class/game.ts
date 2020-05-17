@@ -101,14 +101,6 @@ export class Game {
     if (!user) return;
 
     this.records.push(_.cloneDeep(this.gameObjects));
-    // console.log(this.records);
-    const objs = this.records[this.records.length - 1];
-    // console.log(objs);
-
-    const u = objs.find(obj => {
-      return obj.type === "user";
-    });
-    console.log(this.records.length - 1, u);
 
     const { X, Y } = user.getPoint();
     // 進行方向が入力されると
