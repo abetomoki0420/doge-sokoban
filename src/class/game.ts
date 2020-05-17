@@ -1,5 +1,5 @@
 export type Key = "left" | "up" | "right" | "down";
-export type GameObjectType = "user" | "box" | "wall" | "star";
+export type GameObjectType = "user" | "box" | "wall" | "star" | "";
 
 import _ from "lodash";
 

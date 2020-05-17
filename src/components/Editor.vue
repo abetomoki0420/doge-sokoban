@@ -1,9 +1,27 @@
 <template>
-  <div class="editor">
+  <div
+    @keydown.prevent.space="selectPallete('')"
+    @keydown.prevent.a="selectPallete('user')"
+    @keydown.prevent.s="selectPallete('wall')"
+    @keydown.prevent.d="selectPallete('box')"
+    @keydown.prevent.f="selectPallete('star')"
+    class="editor"
+    tabindex="-1"
+  >
     <h1>Doge Sokoban Editor</h1>
     <div>
       <span>size</span>
       <input min="6" max="10" type="number" v-model.number="size" />
+    </div>
+    <div class="pallettePanels">
+      <cell
+        class="pallete touchable"
+        :class="{ selected: selectedPallete === pallete }"
+        v-for="(pallete, index) in pallets"
+        :key="`row_${1}cell_${index}`"
+        :selected="pallete"
+        @click.native="selectPallete(pallete)"
+      />
     </div>
     <div class="game_board">
       <div v-for="row in size" :key="`row_${row}`" class="game_board_cellrow">
@@ -15,25 +33,31 @@
           :Y="row"
           :key="`row_${row}cell_${cell}`"
           :selected="checkCellType(cell, row)"
+          @mouseover.native="move($event, cell, row)"
         />
       </div>
     </div>
+    <button @click="save">Save</button>
+    <button @click="reset">Reset</button>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Cell from "@/components/Cell.vue";
+import { GameObjectType } from "@/class/game";
 
 interface CellInfo {
   X: number;
   Y: number;
-  type: string;
+  type: GameObjectType;
 }
 
 interface Data {
   size: number;
   editedCells: CellInfo[];
+  pallets: GameObjectType[];
+  selectedPallete: GameObjectType;
 }
 
 export default Vue.extend({
@@ -41,7 +65,9 @@ export default Vue.extend({
   data(): Data {
     return {
       size: 6,
-      editedCells: []
+      editedCells: [],
+      pallets: ["", "user", "wall", "box", "star"],
+      selectedPallete: ""
     };
   },
   components: {
@@ -49,6 +75,38 @@ export default Vue.extend({
   },
   computed: {},
   methods: {
+    reset() {
+      this.editedCells = [];
+    },
+    async save() {
+      const cells = this.editedCells.filter(cell => cell.type !== "");
+
+      const payload = {
+        size: this.size,
+        objects: cells
+      };
+
+      try {
+        await this.axios.post(
+          "https://us-central1-doge-sokoban.cloudfunctions.net/createMap",
+          payload,
+          {
+            headers: { "Content-Type": "application/json" }
+          }
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    move(e: MouseEvent, x: number, y: number) {
+      console.log(e.buttons);
+      if (e.buttons === 0) return;
+
+      this.editCell(x, y);
+    },
+    selectPallete(type: GameObjectType) {
+      this.selectedPallete = type;
+    },
     checkCellType(x: number, y: number): string {
       const cell = this.editedCells.find(cell => {
         return cell.X === x && cell.Y === y;
@@ -65,38 +123,16 @@ export default Vue.extend({
         return cell.X === x && cell.Y === y;
       });
 
-      if (targetCell) {
-        switch (targetCell.type) {
-          case "": {
-            targetCell.type = "user";
-            break;
-          }
-          case "user": {
-            targetCell.type = "wall";
-            break;
-          }
-          case "wall": {
-            targetCell.type = "box";
-            break;
-          }
-          case "box": {
-            targetCell.type = "star";
-            break;
-          }
-          case "star": {
-            targetCell.type = "";
-            break;
-          }
-          default:
-            break;
-        }
-      } else {
+      if (!targetCell) {
         this.editedCells.push({
           X: x,
           Y: y,
-          type: "user"
+          type: this.selectedPallete
         });
+        return;
       }
+
+      targetCell.type = this.selectedPallete;
     }
   }
 });
@@ -105,7 +141,23 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .editor {
   text-align: center;
+  &:focus {
+    outline: 0 black solid;
+  }
 }
+
+.pallettePanels {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  .pallete {
+    margin-right: 8px;
+    &.selected {
+      border: 3px solid tomato;
+    }
+  }
+}
+
 .game_board {
   &_cellrow {
     display: flex;
@@ -122,6 +174,9 @@ export default Vue.extend({
   cursor: pointer;
   &:hover {
     opacity: 0.8;
+  }
+  &:focus {
+    outline: 0 black solid;
   }
 }
 </style>
