@@ -95,10 +95,34 @@ export class Game {
   }
 
   public getObject(targetX: number, targetY: number) {
-    return this.gameObjects.find(gameObject => {
+    const objs = this.gameObjects.filter(gameObject => {
       const { X, Y } = gameObject.getPoint();
       return X === targetX && Y === targetY;
     });
+
+    if (objs.length > 1) {
+      const hasWall = objs.find(gameObject => {
+        return gameObject.type === "wall";
+      });
+      if (hasWall) return hasWall;
+      const hasUser = objs.find(gameObject => {
+        return gameObject.type === "user";
+      });
+      if (hasUser) return hasUser;
+      const hasBox = objs.find(gameObject => {
+        return gameObject.type === "box";
+      });
+      if (hasBox) return hasBox;
+
+      return;
+    } else {
+      return objs[0];
+    }
+
+    // return this.gameObjects.find(gameObject => {
+    //   const { X, Y } = gameObject.getPoint();
+    //   return X === targetX && Y === targetY;
+    // });
   }
 
   public move(key: Key): void {
