@@ -8,7 +8,7 @@
     class="editor"
     tabindex="-1"
   >
-    <h1>Doge Sokoban Editor</h1>
+    <h1>doge sokoban editor</h1>
     <div>
       <span>size</span>
       <input min="6" max="10" type="number" v-model.number="size" />

@@ -1,21 +1,14 @@
 <template>
   <div id="app">
-    <div>
-      <router-link to="/?id=1">Top</router-link>
-    </div>
-    <div>
-      <router-link to="/list">List</router-link>
-    </div>
-    <div>
-      <router-link to="/editor">Editor</router-link>
-    </div>
-    <router-view />
+    <app-header />
+    <app-content />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-// import Game from "@/components/Game.vue";
+import AppHeader from "@/components/AppHeader.vue";
+import AppContent from "@/components/AppContent.vue";
 
 export default Vue.extend({
   name: "App",
@@ -23,15 +16,22 @@ export default Vue.extend({
     return {};
   },
   components: {
-    // Game
+    AppHeader,
+    AppContent
   }
 });
 </script>
 
-<style lang="scss" scoped>
-.app {
-  display: flex;
-  width: 100vw;
-  justify-content: center;
+<style lang="scss">
+* {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  touch-action: manipulation;
+}
+
+h1,
+h2,
+h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 </style>

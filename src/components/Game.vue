@@ -12,8 +12,14 @@
     tabindex="0"
     class="game_board_wrapper"
   >
-    <h1>Doge sokoban</h1>
-    <h3>use WASD or Arrow Key</h3>
+    <h1>
+      <span class="wow-red">doge </span><span class="wow-yellow">sokoban</span>
+    </h1>
+    <h3>
+      <span class="wow-pink">use </span><span class="wow-green">wasd </span>
+      <span class="wow-red">or </span><span class="wow-pink">arrow </span>
+      <span class="wow-blue">keys</span>
+    </h3>
     <div class="game_board">
       <div
         v-for="row in gameSize"
@@ -29,12 +35,12 @@
         />
       </div>
       <div class="buttons">
-        <button @click="move('left')">Left</button>
-        <button @click="move('down')">Down</button>
-        <button @click="move('up')">Up</button>
-        <button @click="move('right')">Right</button>
-        <button @click="back">Back</button>
-        <button @click="reset">Reset</button>
+        <button @click="move('left')">left</button>
+        <button @click="move('down')">down</button>
+        <button @click="move('up')">up</button>
+        <button @click="move('right')">right</button>
+        <button @click="back">back</button>
+        <button @click="reset">reset</button>
       </div>
     </div>
     <h1 v-if="checkClear">
@@ -167,6 +173,24 @@ export default Vue.extend({
     button {
       font-size: 20px;
     }
+  }
+}
+
+.wow {
+  &-red {
+    color: red;
+  }
+  &-green {
+    color: green;
+  }
+  &-blue {
+    color: blue;
+  }
+  &-pink {
+    color: pink;
+  }
+  &-yellow {
+    color: darken(yellow, 10%);
   }
 }
 </style>
