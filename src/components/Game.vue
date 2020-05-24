@@ -55,6 +55,7 @@ import Cell from "@/components/Cell.vue";
 import { Game, GameObject } from "@/class/game";
 
 import { Key } from "@/class/game";
+import { mapActions, mapGetters } from "vuex";
 
 interface Data {
   size: number;
@@ -72,17 +73,16 @@ export default Vue.extend({
   components: {
     Cell
   },
-  async mounted() {
-    let query = "";
+  async beforeMount() {
+    let mapId = "";
     if (this.$route.query.id) {
-      query = `?id=${this.$route.query.id}`;
+      mapId = `${this.$route.query.id}`;
     }
 
-    const { data } = await this.axios.get(
-      `https://us-central1-doge-sokoban.cloudfunctions.net/getMap${query}`
-    );
+    await this.fetchMapByMapId(mapId);
 
     const responsedGameObjects = [];
+    const data = this.getSelectedMap;
     this.size = data.size;
     for (const i in data.objects) {
       const { X, Y, type } = data.objects[i];
@@ -98,6 +98,7 @@ export default Vue.extend({
     });
   },
   computed: {
+    ...mapGetters("map", ["getSelectedMap"]),
     gameSize(): any {
       if (!this.game) return 0;
 
@@ -115,6 +116,7 @@ export default Vue.extend({
     }
   },
   methods: {
+    ...mapActions("map", ["fetchMapByMapId"]),
     selectLocation(x: number, y: number) {
       if (!this.game) return "";
 
@@ -157,6 +159,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+@import "src/assets/scss/global.scss";
 .game_board {
   &_cellrow {
     display: flex;
@@ -173,24 +176,6 @@ export default Vue.extend({
     button {
       font-size: 20px;
     }
-  }
-}
-
-.wow {
-  &-red {
-    color: red;
-  }
-  &-green {
-    color: green;
-  }
-  &-blue {
-    color: blue;
-  }
-  &-pink {
-    color: pink;
-  }
-  &-yellow {
-    color: darken(yellow, 10%);
   }
 }
 </style>

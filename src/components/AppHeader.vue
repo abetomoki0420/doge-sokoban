@@ -2,7 +2,7 @@
   <div class="app-header">
     <div class="app-header-items">
       <span class="app-header-item">
-        <router-link to="/?id=1">top</router-link>
+        <router-link to="/">top</router-link>
       </span>
       <span v-if="isSignedIn" class="app-header-item">
         <router-link to="/list">list</router-link>

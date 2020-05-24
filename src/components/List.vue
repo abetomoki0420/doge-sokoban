@@ -4,8 +4,9 @@
       List
     </h1>
     <ul>
-      <li v-for="id in ids" :key="id">
-        Game id <router-link :to="`/?id=${id}`">{{ id }}</router-link>
+      <li v-for="(map, index) in getMaps" :key="map.id">
+        {{ index + 1 }}:
+        <router-link :to="`/game?id=${map.id}`">{{ map.name }}</router-link>
       </li>
     </ul>
   </div>
@@ -13,6 +14,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { mapActions, mapGetters } from "vuex";
 
 interface Data {
   ids: string[];
@@ -25,12 +27,16 @@ export default Vue.extend({
     };
   },
   async mounted() {
-    const { data } = await this.axios.get(
-      "https://us-central1-doge-sokoban.cloudfunctions.net/getMapList"
-    );
-    if (data) {
-      this.ids = data;
-    }
+    const { uid } = this.getCurrentUser;
+
+    await this.fetchMapsByUid(uid);
+  },
+  computed: {
+    ...mapGetters("map", ["getMaps"]),
+    ...mapGetters("auth", ["getCurrentUser"])
+  },
+  methods: {
+    ...mapActions("map", ["fetchMapsByUid"])
   }
 });
 </script>

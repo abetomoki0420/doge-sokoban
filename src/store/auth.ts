@@ -15,6 +15,9 @@ export const authModule: Module<any, any> = {
   }),
 
   getters: {
+    getCurrentUser(state) {
+      return state.user;
+    },
     isSignedIn(state) {
       return !!state.user;
     }

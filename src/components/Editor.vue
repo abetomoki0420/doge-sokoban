@@ -1,17 +1,18 @@
 <template>
-  <div
-    @keydown.prevent.space="selectPallete('')"
-    @keydown.prevent.a="selectPallete('user')"
-    @keydown.prevent.s="selectPallete('wall')"
-    @keydown.prevent.d="selectPallete('box')"
-    @keydown.prevent.f="selectPallete('star')"
-    class="editor"
-    tabindex="-1"
-  >
-    <h1>doge sokoban editor</h1>
-    <div>
-      <span>size</span>
-      <input min="6" max="10" type="number" v-model.number="size" />
+  <div class="editor" tabindex="-1">
+    <h1>
+      <span class="wow-red">doge </span><span class="wow-yellow">sokoban </span
+      ><span class="wow-blue">editor </span>
+    </h1>
+    <div class="size-section">
+      <span class="size-section-label">size:</span>
+      <input
+        class="size-section-input"
+        min="6"
+        max="10"
+        type="number"
+        v-model.number="size"
+      />
     </div>
     <div class="pallettePanels">
       <cell
@@ -37,8 +38,12 @@
         />
       </div>
     </div>
-    <button @click="save">Save</button>
     <button @click="reset">Reset</button>
+    <div class="controls">
+      <div>input your amazing sokoban name!</div>
+      <input v-model="inputedName" class="controls-input-name" type="text" />
+      <button @click="save" :disabled="!validate">Save</button>
+    </div>
   </div>
 </template>
 
@@ -46,6 +51,7 @@
 import Vue from "vue";
 import Cell from "@/components/Cell.vue";
 import { GameObjectType } from "@/class/game";
+import { mapActions, mapGetters } from "vuex";
 
 interface CellInfo {
   X: number;
@@ -58,6 +64,7 @@ interface Data {
   editedCells: CellInfo[];
   pallets: GameObjectType[];
   selectedPallete: GameObjectType;
+  inputedName: string;
 }
 
 export default Vue.extend({
@@ -67,39 +74,54 @@ export default Vue.extend({
       size: 6,
       editedCells: [],
       pallets: ["", "user", "wall", "box", "star"],
-      selectedPallete: ""
+      selectedPallete: "",
+      inputedName: ""
     };
   },
   components: {
     Cell
   },
-  computed: {},
+  computed: {
+    ...mapGetters("auth", ["getCurrentUser"]),
+    validate(): boolean {
+      const user = this.editedCells.filter(cell => cell.type === "user");
+      if (user.length !== 1) return false;
+
+      const box = this.editedCells.filter(cell => cell.type === "box");
+      const star = this.editedCells.filter(cell => cell.type === "star");
+
+      if (box.length < 1) return false;
+      if (star.length < 1) return false;
+
+      if (box.length !== star.length) return false;
+
+      if (this.inputedName.length < 1) return false;
+      return true;
+    }
+  },
   methods: {
+    ...mapActions("map", ["createMap"]),
     reset() {
       this.editedCells = [];
     },
     async save() {
       const cells = this.editedCells.filter(cell => cell.type !== "");
 
-      const payload = {
-        size: this.size,
-        objects: cells
-      };
-
       try {
-        await this.axios.post(
-          "https://us-central1-doge-sokoban.cloudfunctions.net/createMap",
-          payload,
-          {
-            headers: { "Content-Type": "application/json" }
-          }
-        );
+        const { uid } = this.getCurrentUser;
+        const payload = {
+          uid: uid,
+          size: this.size,
+          name: this.inputedName,
+          objects: cells
+        };
+        await this.createMap(payload);
+        await this.$router.push("/list");
       } catch (e) {
         console.log(e);
       }
     },
     move(e: MouseEvent, x: number, y: number) {
-      console.log(e.buttons);
       if (e.buttons === 0) return;
 
       this.editCell(x, y);
@@ -139,6 +161,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+@import "src/assets/scss/global.scss";
+
 .editor {
   text-align: center;
   &:focus {
@@ -167,6 +191,22 @@ export default Vue.extend({
     button {
       font-size: 20px;
     }
+  }
+}
+
+.size-section {
+  margin-bottom: 8px;
+  &-label {
+    margin-right: 4px;
+  }
+  &-input {
+    font-size: 20px;
+  }
+}
+
+.controls {
+  &-input-name {
+    margin-right: 8px;
   }
 }
 

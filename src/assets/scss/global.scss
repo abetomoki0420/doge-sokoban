@@ -1,0 +1,17 @@
+.wow {
+  &-red {
+    color: red;
+  }
+  &-green {
+    color: green;
+  }
+  &-blue {
+    color: blue;
+  }
+  &-pink {
+    color: darken(pink, 10%);
+  }
+  &-yellow {
+    color: darken(yellow, 10%);
+  }
+}

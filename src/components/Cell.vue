@@ -27,7 +27,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-$container_size: 50px;
+$container_size: 36px;
 $magnification: 1;
 $container_body_size: $container_size * $magnification;
 $theme_color: rgba(0, 0, 0, 0.1);
