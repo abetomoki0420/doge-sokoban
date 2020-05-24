@@ -53,6 +53,10 @@ export class Game {
     this.count++;
   }
 
+  public isBackable() {
+    return this.records.length > 0;
+  }
+
   public back() {
     if (this.records.length > 0) {
       this.gameObjects = this.records[this.records.length - 1];
@@ -118,11 +122,6 @@ export class Game {
     } else {
       return objs[0];
     }
-
-    // return this.gameObjects.find(gameObject => {
-    //   const { X, Y } = gameObject.getPoint();
-    //   return X === targetX && Y === targetY;
-    // });
   }
 
   public move(key: Key): void {

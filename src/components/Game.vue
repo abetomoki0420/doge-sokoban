@@ -39,7 +39,7 @@
         <button @click="move('down')">down</button>
         <button @click="move('up')">up</button>
         <button @click="move('right')">right</button>
-        <button @click="back">back</button>
+        <button :disabled="!isBackable" @click="back">back</button>
         <button @click="reset">reset</button>
       </div>
     </div>
@@ -113,6 +113,11 @@ export default Vue.extend({
       if (!this.game) return false;
 
       return this.game.isClear();
+    },
+    isBackable(): boolean {
+      if (!this.game) return false;
+
+      return this.game.isBackable();
     }
   },
   methods: {
