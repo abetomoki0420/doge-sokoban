@@ -24,7 +24,7 @@ export default Vue.extend({
 
 <style lang="scss">
 * {
-  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-family: "Comic Sans MS", "Marker Felt", cursive, sans-serif;
   touch-action: manipulation;
 }
 

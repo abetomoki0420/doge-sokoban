@@ -27,7 +27,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-$container_size: 36px;
+$container_size: 50px;
 $magnification: 1;
 $container_body_size: $container_size * $magnification;
 $theme_color: rgba(0, 0, 0, 0.1);
@@ -37,8 +37,15 @@ $wall_color: green;
 $star_color: yellow;
 
 @mixin box($size) {
-  width: $size;
-  height: $size;
+  @media screen and (min-width: 768px) {
+    width: $size;
+    height: $size;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: $size * 0.7;
+    height: $size * 0.7;
+  }
 }
 
 .cell {
